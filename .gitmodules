@@ -1,0 +1,3 @@
+[submodule "monolith"]
+	path = monolith
+	url = git@github.com:rhysd/monolith.wasm.git
