@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "module": "esNext",
+    "moduleResolution": "node",
+    "preserveConstEnums": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "strict": true,
+    "target": "es2019",
+    "sourceMap": true,
+    "esModuleInterop": true
+  },
+  "files": [
+    "bootstrap.ts",
+    "index.ts"
+  ]
+}
