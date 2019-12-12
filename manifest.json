@@ -1,0 +1,30 @@
+{
+  "name": "Monolith",
+  "version": "0.1.0",
+  "description": "Get a monolith (single HTML file) of the web page",
+  "manifest_version": 2,
+  "permissions": [
+    "activeTab"
+  ],
+  "icons": {
+    "16": "icon/icon-16.png",
+    "32": "icon/icon-32.png",
+    "48": "icon/icon-48.png",
+    "96": "icon/icon-96.png",
+    "128": "icon/icon-128.png",
+    "256": "icon/icon-256.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "16": "icon/icon-16.png",
+      "32": "icon/icon-32.png"
+    },
+    "default_title": "Monolith",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "page": "background.html",
+    "persistent": false
+  },
+  "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self'"
+}

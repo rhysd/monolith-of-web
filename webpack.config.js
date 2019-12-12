@@ -4,12 +4,13 @@ const path = require('path');
 module.exports = {
     mode: 'development',
     entry: {
-        background: './bootstrap.ts',
+        popup: './popup.ts',
+        bootstrap: './bootstrap.ts',
     },
     devtool: 'inline-source-map',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bootstrap.js',
+        filename: '[name].js',
     },
     module: {
         rules: [
@@ -23,5 +24,22 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.js', '.wasm'],
     },
-    plugins: [new CopyWebpackPlugin(['index.html', 'node_modules/bulma/css/bulma.min.css', 'style.css'])],
+    plugins: [
+        new CopyWebpackPlugin([
+            'background.html',
+            'node_modules/bulma/css/bulma.min.css',
+            'style.css',
+            { from: 'icon', to: 'icon' },
+            'manifest.json',
+            'popup.html',
+            'popup.css',
+        ]),
+    ],
+    devServer: {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        },
+        disableHostCheck: true,
+        writeToDisk: true, // Useful for Chrome extension
+    },
 };
