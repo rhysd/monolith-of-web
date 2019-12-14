@@ -7,7 +7,16 @@
     <title>Monolith of Web</title>
   </head>
   <body>
-    hello, browser action!
+    <main>
+      <button id="get-monolith-btn" class="button is-dark">■ Get Monolith</button>
+      <article id="error-message" class="message is-danger">
+        <div class="message-header">
+          <p id="error-title"></p>
+          <button id="error-close" class="delete" aria-label="delete"></button>
+        </div>
+        <div id="error-body" class="message-body"></div>
+      </article>
+    </main>
     <script src="./popup.js"></script>
   </body>
 </html>
