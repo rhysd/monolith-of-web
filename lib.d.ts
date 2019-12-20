@@ -15,3 +15,5 @@ type MessageDownloadComplete = {
     type: 'popup:complete';
 };
 type MessageToPopup = MessageErrorHappened | MessageDownloadComplete;
+
+type Message = MessageToBackground | MessageToPopup;

@@ -55,38 +55,55 @@ class GetButton {
     }
 }
 
-const errorMessage = document.getElementById('error-message') as HTMLElement;
-const errorTitle = document.getElementById('error-title') as HTMLElement;
-const errorCloseButton = document.getElementById('error-close') as HTMLButtonElement;
-const errorBody = document.getElementById('error-body') as HTMLElement;
-const getButton = new GetButton(document.getElementById('get-monolith-btn') as HTMLButtonElement);
+class ErrorMessage {
+    constructor(
+        private container: HTMLElement,
+        private title: HTMLElement,
+        private body: HTMLElement,
+        closeBtn: HTMLButtonElement,
+    ) {
+        console.log({ container, title, body });
+        this.close = this.close.bind(this);
+        closeBtn.addEventListener('click', this.close);
+    }
 
-function showError(title: string, body: string) {
-    errorTitle.innerText = title;
-    errorBody.innerText = body;
-    errorMessage.style.display = 'block';
+    show(title: string, message: string) {
+        this.title.innerText = title;
+        this.body.innerText = message;
+        this.container.style.display = 'block';
+    }
+
+    close() {
+        this.container.style.display = '';
+    }
 }
 
-errorCloseButton.addEventListener('click', () => {
-    errorMessage.style.display = '';
-});
+const errorMessage = new ErrorMessage(
+    document.getElementById('error-message') as HTMLElement,
+    document.getElementById('error-title') as HTMLElement,
+    document.getElementById('error-body') as HTMLElement,
+    document.getElementById('error-close') as HTMLButtonElement,
+);
+const getButton = new GetButton(document.getElementById('get-monolith-btn') as HTMLButtonElement);
 
 getButton.onClick(() => {
     getButton.startLoading();
     chrome.tabs.executeScript({ file: 'content.js' });
 });
 
-chrome.runtime.onMessage.addListener((msg: MessageToPopup) => {
+chrome.runtime.onMessage.addListener((msg: Message) => {
     switch (msg.type) {
         case 'popup:error':
             getButton.clear();
-            showError(msg.name || 'ERROR', msg.message);
+            errorMessage.show(msg.name || 'ERROR', msg.message);
             break;
         case 'popup:complete':
             getButton.success();
             break;
         default:
-            console.warn('Unknown message:', msg);
+            if (msg.type.startsWith('popup:')) {
+                console.error('Unexpected message:', msg);
+            }
             break;
     }
 });

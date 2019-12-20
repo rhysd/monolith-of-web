@@ -25,14 +25,14 @@ async function download(msg: MessageDownloadMonolith) {
     }
 }
 
-chrome.runtime.onMessage.addListener(async (msg: MessageToBackground) => {
+chrome.runtime.onMessage.addListener(async (msg: Message) => {
     try {
         switch (msg.type) {
             case 'bg:download':
                 await download(msg);
                 break;
             default:
-                if ((msg.type as string).startsWith('bg:')) {
+                if (msg.type.startsWith('bg:')) {
                     console.error('FATAL: Unexpected message:', msg);
                 }
                 break;
