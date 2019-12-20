@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         popup: './popup.ts',
         bootstrap: './bootstrap.ts',
+        content: './content.ts',
     },
     devtool: 'inline-source-map',
     output: {

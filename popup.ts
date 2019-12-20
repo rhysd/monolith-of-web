@@ -15,5 +15,18 @@ function showError(title: string, body: string) {
 }
 
 getButton.addEventListener('click', () => {
-    showError('Hi!', 'Hello, world!');
+    chrome.tabs.executeScript({ file: 'content.js' });
+});
+
+chrome.runtime.onMessage.addListener((msg: MessageToPopup) => {
+    switch (msg.type) {
+        case 'popup:error':
+            showError(msg.name || 'ERROR', msg.message);
+            break;
+        default:
+            if ((msg.type as string).startsWith('popup:')) {
+                console.error('FATAL: Unexpected message:', msg);
+            }
+            break;
+    }
 });

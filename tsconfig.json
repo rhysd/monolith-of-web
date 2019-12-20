@@ -19,6 +19,8 @@
   "files": [
     "popup.ts",
     "bootstrap.ts",
-    "background.ts"
+    "background.ts",
+    "content.ts",
+    "lib.d.ts"
   ]
 }

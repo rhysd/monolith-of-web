@@ -25,6 +25,7 @@
   "homepage": "https://github.com/rhysd/monolith-of-web#readme",
   "devDependencies": {
     "@types/chrome": "0.0.91",
+    "@types/sanitize-filename": "^1.6.3",
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.12.0",
     "copy-webpack-plugin": "^5.1.1",
@@ -41,6 +42,7 @@
   },
   "dependencies": {
     "bulma": "^0.8.0",
-    "monolith": "file:./monolith"
+    "monolith": "file:./monolith",
+    "sanitize-filename": "^1.6.3"
   }
 }
