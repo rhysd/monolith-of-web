@@ -34,7 +34,6 @@ module.exports = {
                 from: 'node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2',
                 to: 'fonts/',
             },
-            'style.css',
             { from: 'icon', to: 'icon' },
             'manifest.json',
             'popup.html',
