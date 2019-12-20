@@ -4,7 +4,6 @@
   "description": "Get a monolith (single HTML file) of the web page",
   "manifest_version": 2,
   "permissions": [
-    "downloads",
     "activeTab"
   ],
   "icons": {
