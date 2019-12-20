@@ -11,4 +11,7 @@ type MessageErrorHappened = {
     name: string | undefined;
     message: string;
 };
-type MessageToPopup = MessageErrorHappened;
+type MessageDownloadComplete = {
+    type: 'popup:complete';
+};
+type MessageToPopup = MessageErrorHappened | MessageDownloadComplete;

@@ -7,3 +7,6 @@ main {
   margin-top: 32px;
   display: none;
 }
+i.mdi {
+  margin-right: 0.3em;
+}

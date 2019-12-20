@@ -29,6 +29,11 @@ module.exports = {
         new CopyWebpackPlugin([
             'background.html',
             'node_modules/bulma/css/bulma.min.css',
+            'node_modules/@mdi/font/css/materialdesignicons.min.css',
+            {
+                from: 'node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2',
+                to: 'fonts/',
+            },
             'style.css',
             { from: 'icon', to: 'icon' },
             'manifest.json',

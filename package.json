@@ -41,6 +41,7 @@
     "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
+    "@mdi/font": "^4.7.95",
     "bulma": "^0.8.0",
     "monolith": "file:./monolith",
     "sanitize-filename": "^1.6.3"

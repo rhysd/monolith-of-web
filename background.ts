@@ -16,10 +16,13 @@ async function download(msg: MessageDownloadMonolith) {
     try {
         const file = `${sanitizeFileName(msg.title) || 'index'}.html`;
         downloadURL(file, obj);
+        const complete: MessageDownloadComplete = {
+            type: 'popup:complete',
+        };
+        chrome.runtime.sendMessage(complete);
     } finally {
         URL.revokeObjectURL(obj);
     }
-    throw new Error('Hello!');
 }
 
 chrome.runtime.onMessage.addListener(async (msg: MessageToBackground) => {
