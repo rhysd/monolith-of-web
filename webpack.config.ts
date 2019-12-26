@@ -1,7 +1,8 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const path = require('path');
+import * as webpack from 'webpack';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import * as path from 'path';
 
-module.exports = {
+const config: webpack.Configuration = {
     mode: 'development',
     entry: {
         popup: './popup.ts',
@@ -48,3 +49,5 @@ module.exports = {
         writeToDisk: true, // Useful for Chrome extension
     },
 };
+
+export default config;

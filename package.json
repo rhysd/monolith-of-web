@@ -5,12 +5,12 @@
   "description": "",
   "main": "",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "build:release": "NODE_ENV=production webpack --config webpack.config.js --mode production",
+    "build": "TS_NODE_PROJECT=tsconfig.webpack.json webpack",
+    "build:release": "TS_NODE_PROJECT=tsconfig.webpack.json NODE_ENV=production webpack --mode production",
     "clean": "rm -rf ./dist",
     "release": "npm-run-all clean build:release",
     "lint": "eslint '*.ts'",
-    "start": "webpack-dev-server"
+    "start": "TS_NODE_PROJECT=tsconfig.webpack.json webpack-dev-server"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,10 @@
   "homepage": "https://github.com/rhysd/monolith-of-web#readme",
   "devDependencies": {
     "@types/chrome": "0.0.91",
+    "@types/copy-webpack-plugin": "^5.0.0",
     "@types/sanitize-filename": "^1.6.3",
+    "@types/webpack": "^4.41.0",
+    "@types/webpack-dev-server": "^3.9.0",
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.12.0",
     "copy-webpack-plugin": "^5.1.1",
@@ -35,6 +38,8 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1",
     "ts-loader": "^6.2.1",
+    "ts-node": "^8.5.4",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.3",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
