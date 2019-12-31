@@ -1,4 +1,4 @@
-const html = document.documentElement.outerHTML;
+const html = '<!DOCTYPE html>' + document.documentElement.outerHTML;
 const url = location.href;
 const title = document.title;
 const msg: MessageToBackground = {
