@@ -1,11 +1,25 @@
+interface Config {
+    noJs: boolean;
+    noCss: boolean;
+    noIFrames: boolean;
+    noImages: boolean;
+}
+
 type MessageDownloadMonolith = {
-    type: 'bg:download';
+    type: 'bg:start';
+    html: string;
+    title: string;
+    url: string;
+    config: Config;
+};
+type MessageToBackground = MessageDownloadMonolith;
+
+type MessageMonolithContent = {
+    type: 'popup:content';
     html: string;
     title: string;
     url: string;
 };
-type MessageToBackground = MessageDownloadMonolith;
-
 type MessageErrorHappened = {
     type: 'popup:error';
     name: string | undefined;
@@ -14,6 +28,6 @@ type MessageErrorHappened = {
 type MessageDownloadComplete = {
     type: 'popup:complete';
 };
-type MessageToPopup = MessageErrorHappened | MessageDownloadComplete;
+type MessageToPopup = MessageMonolithContent | MessageErrorHappened | MessageDownloadComplete;
 
 type Message = MessageToBackground | MessageToPopup;

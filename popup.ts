@@ -62,7 +62,6 @@ class ErrorMessage {
         private body: HTMLElement,
         closeBtn: HTMLButtonElement,
     ) {
-        console.log({ container, title, body });
         this.close = this.close.bind(this);
         closeBtn.addEventListener('click', this.close);
     }
@@ -78,6 +77,25 @@ class ErrorMessage {
     }
 }
 
+const COLOR_DISABLED = 'has-text-grey-light';
+class ConfigButton {
+    constructor(private elem: HTMLElement) {
+        elem.addEventListener('click', this.toggle.bind(this));
+    }
+
+    toggle() {
+        if (this.elem.classList.contains(COLOR_DISABLED)) {
+            this.elem.classList.remove(COLOR_DISABLED);
+        } else {
+            this.elem.classList.add(COLOR_DISABLED);
+        }
+    }
+
+    enabled() {
+        return !this.elem.classList.contains(COLOR_DISABLED);
+    }
+}
+
 const errorMessage = new ErrorMessage(
     document.getElementById('error-message') as HTMLElement,
     document.getElementById('error-title') as HTMLElement,
@@ -85,14 +103,38 @@ const errorMessage = new ErrorMessage(
     document.getElementById('error-close') as HTMLButtonElement,
 );
 const getButton = new GetButton(document.getElementById('get-monolith-btn') as HTMLButtonElement);
+const configButtons = {
+    noJs: new ConfigButton(document.getElementById('config-js') as HTMLElement),
+    noCss: new ConfigButton(document.getElementById('config-css') as HTMLElement),
+    noIFrames: new ConfigButton(document.getElementById('config-iframes') as HTMLElement),
+    noImages: new ConfigButton(document.getElementById('config-images') as HTMLElement),
+};
 
 getButton.onClick(() => {
     getButton.startLoading();
     chrome.tabs.executeScript({ file: 'content.js' });
 });
 
+function startMonolith(m: MessageMonolithContent) {
+    const config = {
+        noJs: !configButtons.noJs.enabled(),
+        noCss: !configButtons.noCss.enabled(),
+        noIFrames: !configButtons.noIFrames.enabled(),
+        noImages: !configButtons.noImages.enabled(),
+    };
+    const msg: MessageToBackground = {
+        ...m,
+        type: 'bg:start',
+        config,
+    };
+    chrome.runtime.sendMessage(msg);
+}
+
 chrome.runtime.onMessage.addListener((msg: Message) => {
     switch (msg.type) {
+        case 'popup:content':
+            startMonolith(msg);
+            break;
         case 'popup:error':
             getButton.clear();
             errorMessage.show(msg.name || 'ERROR', msg.message);

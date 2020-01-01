@@ -9,10 +9,27 @@ function downloadURL(fileName: string, url: string) {
 }
 
 async function download(msg: MessageDownloadMonolith) {
+    const c = msg.config;
+    console.log('Start monolith for', msg.url, 'with', c);
+
     const opts = MonolithOptions.new();
+    if (c.noJs) {
+        opts.noJs(true);
+    }
+    if (c.noCss) {
+        opts.noCss(true);
+    }
+    if (c.noIFrames) {
+        opts.noFrames(true);
+    }
+    if (c.noImages) {
+        opts.noImages(true);
+    }
+
     const html = await monolithOfHtml(msg.html, msg.url, opts);
     const data = new Blob([html], { type: 'text/html' });
     const obj = URL.createObjectURL(data);
+
     try {
         const file = `${sanitizeFileName(msg.title) || 'index'}.html`;
         downloadURL(file, obj);
@@ -28,7 +45,7 @@ async function download(msg: MessageDownloadMonolith) {
 chrome.runtime.onMessage.addListener(async (msg: Message) => {
     try {
         switch (msg.type) {
-            case 'bg:download':
+            case 'bg:start':
                 await download(msg);
                 break;
             default:

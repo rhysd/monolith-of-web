@@ -1,8 +1,8 @@
 const html = '<!DOCTYPE html>' + document.documentElement.outerHTML;
 const url = location.href;
 const title = document.title;
-const msg: MessageToBackground = {
-    type: 'bg:download',
+const msg: MessageToPopup = {
+    type: 'popup:content',
     html,
     title,
     url,

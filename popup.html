@@ -12,7 +12,7 @@
       <button id="get-monolith-btn" class="button is-dark">
         <span class="icon">
           <i class="mdi mdi-arrow-down-bold-box"></i>
-          <span>Get Monolith</span>
+          <span id="get-monolith-msg">Get Monolith</span>
         </span>
       </button>
       <article id="error-message" class="message is-danger">
@@ -23,6 +23,20 @@
         <div id="error-body" class="message-body"></div>
       </article>
     </main>
+    <div class="config-panel">
+      <span id="config-js" class="config-btn icon is-medium" aria-label="toggle javascript" title="Toggle including JavaScript">
+        <i class="mdi mdi-language-javascript mdi-24px"></i>
+      </span>
+      <span id="config-css" class="config-btn icon is-medium" aria-label="toggle css" title="Toggle including CSS">
+        <i class="mdi mdi-language-css3 mdi-24px"></i>
+      </span>
+      <span id="config-iframes" class="config-btn icon is-medium" aria-label="toggle iframes" title="Toggle including <iframe/>">
+        <i class="mdi mdi-iframe-outline mdi-24px"></i>
+      </span>
+      <span id="config-images" class="config-btn icon is-medium" aria-label="toggle images" title="Toggle including images">
+        <i class="mdi mdi-file-image mdi-24px"></i>
+      </span>
+    </div>
     <script src="./popup.js"></script>
   </body>
 </html>

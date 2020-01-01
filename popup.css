@@ -7,6 +7,14 @@ main {
   margin-top: 32px;
   display: none;
 }
-i.mdi {
-  margin-right: 0.3em;
+#get-monolith-msg {
+  margin-left: 0.3em;
+}
+.config-panel {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.config-btn {
+  cursor: pointer;
 }
