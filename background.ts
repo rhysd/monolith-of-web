@@ -1,6 +1,12 @@
 import { monolithOfHtml, MonolithOptions } from 'monolith';
 import sanitizeFileName from 'sanitize-filename';
 
+declare global {
+    interface Window {
+        downloadMonolith(params: MonolithParams): Promise<void>;
+    }
+}
+
 function downloadURL(fileName: string, url: string) {
     const a = document.createElement('a');
     a.download = fileName;
@@ -8,9 +14,9 @@ function downloadURL(fileName: string, url: string) {
     a.click();
 }
 
-async function download(msg: MessageDownloadMonolith) {
-    const c = msg.config;
-    console.log('Start monolith for', msg.url, 'with', c);
+async function download(params: MonolithParams) {
+    const c = params.config;
+    console.log('Start monolith for', params.url, 'with', c);
 
     const opts = MonolithOptions.new();
     if (c.noJs) {
@@ -26,12 +32,12 @@ async function download(msg: MessageDownloadMonolith) {
         opts.noImages(true);
     }
 
-    const html = await monolithOfHtml(msg.html, msg.url, opts);
+    const html = await monolithOfHtml(params.html, params.url, opts);
     const data = new Blob([html], { type: 'text/html' });
     const obj = URL.createObjectURL(data);
 
     try {
-        const file = `${sanitizeFileName(msg.title) || 'index'}.html`;
+        const file = `${sanitizeFileName(params.title) || 'index'}.html`;
         downloadURL(file, obj);
         const complete: MessageDownloadComplete = {
             type: 'popup:complete',
@@ -42,25 +48,4 @@ async function download(msg: MessageDownloadMonolith) {
     }
 }
 
-chrome.runtime.onMessage.addListener(async (msg: Message) => {
-    try {
-        switch (msg.type) {
-            case 'bg:start':
-                await download(msg);
-                break;
-            default:
-                if (msg.type.startsWith('bg:')) {
-                    console.error('FATAL: Unexpected message:', msg);
-                }
-                break;
-        }
-    } catch (err) {
-        const msg: MessageToPopup = {
-            type: 'popup:error',
-            name: err.name,
-            message: err.message,
-        };
-        chrome.runtime.sendMessage(msg);
-        console.error('ERROR:', err);
-    }
-});
+window.downloadMonolith = download;

@@ -5,14 +5,12 @@ interface Config {
     noImages: boolean;
 }
 
-type MessageDownloadMonolith = {
-    type: 'bg:start';
+interface MonolithParams {
     html: string;
     title: string;
     url: string;
     config: Config;
-};
-type MessageToBackground = MessageDownloadMonolith;
+}
 
 type MessageMonolithContent = {
     type: 'popup:content';
@@ -20,14 +18,9 @@ type MessageMonolithContent = {
     title: string;
     url: string;
 };
-type MessageErrorHappened = {
-    type: 'popup:error';
-    name: string | undefined;
-    message: string;
-};
 type MessageDownloadComplete = {
     type: 'popup:complete';
 };
-type MessageToPopup = MessageMonolithContent | MessageErrorHappened | MessageDownloadComplete;
+type MessageToPopup = MessageMonolithContent | MessageDownloadComplete;
 
-type Message = MessageToBackground | MessageToPopup;
+type Message = MessageToPopup;

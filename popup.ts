@@ -115,37 +115,76 @@ getButton.onClick(() => {
     chrome.tabs.executeScript({ file: 'content.js' });
 });
 
-function startMonolith(m: MessageMonolithContent) {
+type BackgroundWindow = Window & {
+    downloadMonolith(params: MonolithParams): Promise<void>;
+};
+
+function checkBackgroundWindow(w: Window | undefined): w is BackgroundWindow {
+    return !!(w && w.downloadMonolith);
+}
+
+function getBackgroundWindow() {
+    return new Promise<BackgroundWindow | null>(resolve => {
+        chrome.runtime.getBackgroundPage(w => resolve(checkBackgroundWindow(w) ? w : null));
+    });
+}
+
+function sleep(ms: number) {
+    return new Promise<void>(resolve => setTimeout(resolve, ms));
+}
+
+async function getBackgroundWindowWithRetry() {
+    // Retry for 12 * 250 = 3 seconds
+    const retries = 12;
+    const interval = 250;
+    for (let c = 0; c < retries; ++c) {
+        const w = await getBackgroundWindow();
+        if (w !== null) {
+            return w;
+        }
+        await sleep(interval);
+    }
+    throw new Error(
+        `No background page is open nor no background script was loaded successfully after ${retries / 4} seconds`,
+    );
+}
+
+async function startMonolith(msg: MessageMonolithContent) {
     const config = {
         noJs: !configButtons.noJs.enabled(),
         noCss: !configButtons.noCss.enabled(),
         noIFrames: !configButtons.noIFrames.enabled(),
         noImages: !configButtons.noImages.enabled(),
     };
-    const msg: MessageToBackground = {
-        ...m,
-        type: 'bg:start',
-        config,
-    };
-    chrome.runtime.sendMessage(msg);
+
+    try {
+        // Note: Retry is necessary since background page might not be open yet.
+        // In the case, popup page must wait for the background page being loaded.
+        // When loading the background page, background.js is loaded and downloadMonolith
+        // method is set to its Window object. Otherwise, the method in the Window object
+        // is not set yet.
+        const bg = await getBackgroundWindowWithRetry();
+        await bg.downloadMonolith({ ...msg, config });
+    } catch (err) {
+        getButton.clear();
+        errorMessage.show(err.name || 'ERROR', err.message);
+    }
 }
 
 chrome.runtime.onMessage.addListener((msg: Message) => {
+    if (!msg.type.startsWith('popup:')) {
+        return;
+    }
+
     switch (msg.type) {
         case 'popup:content':
             startMonolith(msg);
-            break;
-        case 'popup:error':
-            getButton.clear();
-            errorMessage.show(msg.name || 'ERROR', msg.message);
             break;
         case 'popup:complete':
             getButton.success();
             break;
         default:
-            if (msg.type.startsWith('popup:')) {
-                console.error('Unexpected message:', msg);
-            }
+            console.error('Unexpected message:', msg);
             break;
     }
 });
