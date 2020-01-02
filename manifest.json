@@ -1,7 +1,7 @@
 {
   "name": "Monolith",
   "version": "0.1.0",
-  "description": "Get a monolith (single HTML file) of the web page",
+  "description": "Get a monolith (single static HTML file) of the web page",
   "manifest_version": 2,
   "permissions": [
     "activeTab",
