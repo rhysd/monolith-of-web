@@ -37,6 +37,15 @@ in the generated HTML file.
   its background page. These permissions are necessary since those requests are sometimes blocked by
   CORS policy.
 
+## Development
+
+WebAssembly port of Monolith is developed in [the forked repository][4]. Currently it has some differences
+and duplicates against the original repository. reqwest did not support Wasm before 0.10.0 so my Wasm
+port does not use it and uses `fetch()` directly via `js_sys` and `web_sys` crate.
+
+This repository adds the forked Monolith repository as a Git submodule and uses it by bundling sources
+with Webpack.
+
 ## License
 
 Distributed under [the MIT license](LICENSE).
@@ -45,3 +54,4 @@ Distributed under [the MIT license](LICENSE).
 [1]: https://github.com/Y2Z/monolith
 [2]: https://www.youtube.com/watch?v=xBIrFlYE1W0
 [3]: https://chrome.google.com/webstore/detail/koalogomkahjlabefiglodpnhhkokekg
+[4]: https://github.com/rhysd/monolith
