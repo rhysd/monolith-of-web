@@ -1,7 +1,7 @@
 'Monolith of Web': Chrome Extension Port of [Monolith][1]
 =========================================================
 
-'Monolith of Web' is a Chrome extension ported from CLI tool [Monolith][1]. Monolith is a CLI tool to
+['Monolith of Web'][6] is a Chrome extension ported from CLI tool [Monolith][1]. Monolith is a CLI tool to
 download a web page as static single HTML file. 'Monolith of Web' provides the same functionality as
 a browser extension by compiling Monolith (written in Rust) into WebAssembly.
 
@@ -9,8 +9,8 @@ a browser extension by compiling Monolith (written in Rust) into WebAssembly.
 
 ## Installation
 
-- Install from [Chrome Web Store][3] (under review)
-- Download `.crx` and install it manually
+- Install from Chrome Web Store (NOT YET: under review)
+- Download `.crx` file from [releases page][5] and install it manually
 
 ## Usage
 
@@ -52,3 +52,5 @@ Distributed under [the MIT license](LICENSE).
 [2]: https://www.youtube.com/watch?v=xBIrFlYE1W0
 [3]: https://chrome.google.com/webstore/detail/koalogomkahjlabefiglodpnhhkokekg
 [4]: https://github.com/rhysd/monolith
+[5]: https://github.com/rhysd/monolith-of-web/releases
+[6]: https://github.com/rhysd/monolith-of-web
