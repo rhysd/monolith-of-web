@@ -33,9 +33,6 @@ in the generated HTML file.
 ## Permissions
 
 - `activeTab`: This extension gets an HTML text and a page title from the active tab to generate a monolith
-- `http://*/**` and `https://*/**`: This extension sends requests to any HTTP or HTTPS resources from
-  its background page for fetching all resources as data URL in the generated single HTML file. These
-  permissions are necessary since those requests are sometimes blocked by CORS policy.
 
 ## Development
 
