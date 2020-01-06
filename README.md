@@ -9,7 +9,7 @@ a browser extension by compiling Monolith (written in Rust) into WebAssembly.
 
 ## Installation
 
-- Install from Chrome Web Store (NOT YET: under review)
+- Install from [Chrome Web Store][7]
 - Download `.crx` file from [releases page][5] and install it manually
 
 ## Usage
@@ -43,6 +43,23 @@ port does not use it and uses `fetch()` directly via `js_sys` and `web_sys` crat
 This repository adds the forked Monolith repository as a Git submodule and uses it by bundling sources
 with Webpack.
 
+## Contributing
+
+### Creating an issue
+
+Before reporting an issue, please try the same URL with [CLI version][1]. If it is reproducible with
+CLI version, please report it to the CLI repository at first.
+
+If it is not reproducible with CLI version (it means the issue only occurs with this extension), please
+report it from [issues page][8].
+
+### Improve Wasm part
+
+This repository only includes TypeScript part of extension. Wasm part is developed in
+[forked monolith repository][4]. If your improvement can be applied to [upstream][1], please make a
+pull request in the upstream at first. After the pull request is merged, please make an issue to
+request to merge upstream at this repository or the forked repository.
+
 ## License
 
 Distributed under [the MIT license](LICENSE).
@@ -54,3 +71,5 @@ Distributed under [the MIT license](LICENSE).
 [4]: https://github.com/rhysd/monolith
 [5]: https://github.com/rhysd/monolith-of-web/releases
 [6]: https://github.com/rhysd/monolith-of-web
+[7]: https://chrome.google.com/webstore/detail/monolith/koalogomkahjlabefiglodpnhhkokekg
+[8]: https://github.com/rhysd/monolith-of-web/issues
