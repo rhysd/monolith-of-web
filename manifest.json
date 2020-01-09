@@ -1,6 +1,6 @@
 {
   "name": "Monolith",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Get a monolith (single static HTML file) of the web page",
   "manifest_version": 2,
   "permissions": [
