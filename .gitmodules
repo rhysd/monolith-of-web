@@ -1,3 +1,3 @@
 [submodule "monolith"]
 	path = monolith
-	url = git@github.com:rhysd/monolith.git
+	url = https://github.com/rhysd/monolith.git
