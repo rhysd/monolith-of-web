@@ -57,9 +57,9 @@ class GetButton {
 
 class ErrorMessage {
     constructor(
-        private container: HTMLElement,
-        private title: HTMLElement,
-        private body: HTMLElement,
+        private readonly container: HTMLElement,
+        private readonly title: HTMLElement,
+        private readonly body: HTMLElement,
         closeBtn: HTMLButtonElement,
     ) {
         this.close = this.close.bind(this);
@@ -79,7 +79,7 @@ class ErrorMessage {
 
 const COLOR_DISABLED = 'has-text-grey-light';
 class ConfigButton {
-    constructor(private elem: HTMLElement) {
+    constructor(private readonly elem: HTMLElement) {
         elem.addEventListener('click', this.toggle.bind(this));
     }
 
@@ -120,7 +120,7 @@ type BackgroundWindow = Window & {
 };
 
 function checkBackgroundWindow(w: Window | undefined): w is BackgroundWindow {
-    return !!(w && w.downloadMonolith);
+    return !!w?.downloadMonolith;
 }
 
 function getBackgroundWindow() {
@@ -171,14 +171,14 @@ async function startMonolith(msg: MessageMonolithContent) {
     }
 }
 
-chrome.runtime.onMessage.addListener((msg: Message) => {
+chrome.runtime.onMessage.addListener(async (msg: Message) => {
     if (!msg.type.startsWith('popup:')) {
         return;
     }
 
     switch (msg.type) {
         case 'popup:content':
-            startMonolith(msg);
+            await startMonolith(msg);
             break;
         case 'popup:complete':
             getButton.success();
