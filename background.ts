@@ -29,7 +29,7 @@ function revokeAnyOriginAccess() {
 }
 
 async function download(params: MonolithParams) {
-    const granted = await requestAnyOriginAccess();
+    const granted = params.cors && (await requestAnyOriginAccess());
     console.log('Permissions for CORS request granted:', granted);
 
     const c = params.config;
@@ -58,7 +58,10 @@ async function download(params: MonolithParams) {
         downloadURL(file, obj);
     } finally {
         URL.revokeObjectURL(obj);
-        await revokeAnyOriginAccess();
+        if (granted) {
+            const revoked = await revokeAnyOriginAccess();
+            console.log('Permissions for CORS request revoked:', revoked);
+        }
     }
 }
 

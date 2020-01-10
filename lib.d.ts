@@ -9,6 +9,7 @@ interface MonolithParams {
     html: string;
     title: string;
     url: string;
+    cors: boolean;
     config: Config;
 }
 
@@ -31,7 +32,7 @@ type MessageToPopup = MessageMonolithContent | MessageDownloadComplete | Message
 type MessageCreateMonolith = {
     type: 'bg:start';
     params: MonolithParams;
-}
+};
 type MessageToBackground = MessageCreateMonolith;
 
 type Message = MessageToPopup | MessageToBackground;

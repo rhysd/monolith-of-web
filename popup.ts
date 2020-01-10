@@ -108,6 +108,7 @@ const configButtons = {
     noCss: new ConfigButton(document.getElementById('config-css') as HTMLElement),
     noIFrames: new ConfigButton(document.getElementById('config-iframes') as HTMLElement),
     noImages: new ConfigButton(document.getElementById('config-images') as HTMLElement),
+    allowCors: new ConfigButton(document.getElementById('config-allow-cors') as HTMLElement),
 };
 
 getButton.onClick(() => {
@@ -159,6 +160,7 @@ async function startMonolith(msg: MessageMonolithContent) {
         params: {
             ...msg,
             config,
+            cors: configButtons.allowCors.enabled(),
         },
     };
 
