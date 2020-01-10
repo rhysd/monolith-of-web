@@ -36,7 +36,7 @@ class GetButton {
     }
 
     onClick(cb: () => void) {
-        this.elem.addEventListener('click', cb);
+        this.elem.addEventListener('click', cb, { passive: true });
     }
 
     private setText(label: string, iconName: string) {
@@ -63,7 +63,7 @@ class ErrorMessage {
         closeBtn: HTMLButtonElement,
     ) {
         this.close = this.close.bind(this);
-        closeBtn.addEventListener('click', this.close);
+        closeBtn.addEventListener('click', this.close, { passive: true });
     }
 
     show(title: string, message: string) {
@@ -80,7 +80,7 @@ class ErrorMessage {
 const COLOR_DISABLED = 'has-text-grey-light';
 class ConfigButton {
     constructor(private readonly elem: HTMLElement) {
-        elem.addEventListener('click', this.toggle.bind(this));
+        elem.addEventListener('click', this.toggle.bind(this), { passive: true });
     }
 
     toggle() {
