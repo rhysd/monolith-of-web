@@ -156,12 +156,10 @@ async function startMonolith(msg: MessageMonolithContent) {
     };
 
     const startMsg: MessageToBackground = {
+        ...msg,
         type: 'bg:start',
-        params: {
-            ...msg,
-            config,
-            cors: configButtons.allowCors.enabled(),
-        },
+        config,
+        cors: configButtons.allowCors.enabled(),
     };
 
     // Note: Retry is necessary since background page might not be fully opened yet.

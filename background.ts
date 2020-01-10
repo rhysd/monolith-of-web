@@ -28,12 +28,12 @@ function revokeAnyOriginAccess() {
     });
 }
 
-async function download(params: MonolithParams) {
-    const granted = params.cors && (await requestAnyOriginAccess());
+async function download(msg: MessageCreateMonolith) {
+    const granted = msg.cors && (await requestAnyOriginAccess());
     console.log('Permissions for CORS request granted:', granted);
 
-    const c = params.config;
-    console.log('Start monolith for', params.url, 'with', c);
+    const c = msg.config;
+    console.log('Start monolith for', msg.url, 'with', c);
 
     const opts = MonolithOptions.new();
     if (c.noJs) {
@@ -49,12 +49,12 @@ async function download(params: MonolithParams) {
         opts.noImages(true);
     }
 
-    const html = await monolithOfHtml(params.html, params.url, opts);
+    const html = await monolithOfHtml(msg.html, msg.url, opts);
     const data = new Blob([html], { type: 'text/html' });
     const obj = URL.createObjectURL(data);
 
     try {
-        const file = `${sanitizeFileName(params.title) || 'index'}.html`;
+        const file = `${sanitizeFileName(msg.title) || 'index'}.html`;
         downloadURL(file, obj);
     } finally {
         URL.revokeObjectURL(obj);
@@ -69,7 +69,7 @@ chrome.runtime.onMessage.addListener(async (msg: Message) => {
     switch (msg.type) {
         case 'bg:start':
             try {
-                await download(msg.params);
+                await download(msg);
                 chrome.runtime.sendMessage({ type: 'popup:complete' });
             } catch (err) {
                 chrome.runtime.sendMessage({
