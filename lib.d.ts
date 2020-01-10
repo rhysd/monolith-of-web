@@ -21,6 +21,17 @@ type MessageMonolithContent = {
 type MessageDownloadComplete = {
     type: 'popup:complete';
 };
-type MessageToPopup = MessageMonolithContent | MessageDownloadComplete;
+type MessageDownloadError = {
+    type: 'popup:error';
+    name: string;
+    message: string;
+};
+type MessageToPopup = MessageMonolithContent | MessageDownloadComplete | MessageDownloadError;
 
-type Message = MessageToPopup;
+type MessageCreateMonolith = {
+    type: 'bg:start';
+    params: MonolithParams;
+}
+type MessageToBackground = MessageCreateMonolith;
+
+type Message = MessageToPopup | MessageToBackground;
