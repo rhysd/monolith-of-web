@@ -34,6 +34,23 @@ in the generated HTML file.
 
 - `activeTab`: This extension gets an HTML text and a page title from the active tab to generate a monolith
 
+## Caveats
+
+This extension fetches all resources in [a background page of Chrome extension][9]. The background page
+conforms CORS policy. Fetching the resources restricted by CORS policy of the server side may be rejected.
+In the case, the resource cannot be embedded in the generated single HTML file hence the resource will
+be fallback into empty.
+
+To solve this, there are two ways but both are not acceptable.
+
+1. Add broad permissions `http://*` and `https://*` to the extension manifest. This will require strong
+   permissions to users and will be dangerous when the background page has XSS vulnerability. In addition,
+   Chrome Web Store spends longer time to review the extension release.
+2. Send resource fetching requests via a content script. Since content script is executed in the same CORS
+   policy as its site, passing a resource URL to content script and fetching the resource in content script
+   would avoid this CORS restriction. However, it makes implementation of this extension more complicated.
+   In addition,  CORS request in content script will be [disallowed in manifest V3][10].
+
 ## Development
 
 WebAssembly port of Monolith is developed in [the forked repository][4]. Currently it has some differences
@@ -73,3 +90,5 @@ Distributed under [the MIT license](LICENSE).
 [6]: https://github.com/rhysd/monolith-of-web
 [7]: https://chrome.google.com/webstore/detail/monolith/koalogomkahjlabefiglodpnhhkokekg
 [8]: https://github.com/rhysd/monolith-of-web/issues
+[9]: https://developer.chrome.com/extensions/background_pages
+[10]: https://www.chromium.org/Home/chromium-security/extension-content-script-fetches
