@@ -1,3 +1,12 @@
+<a name="v0.1.2"></a>
+# [v0.1.2](https://github.com/rhysd/monolith-of-web/releases/tag/v0.1.2) - 12 Jan 2020
+
+- **Fix:** Handle CORS more properly
+- **Improve:** Update upstream monolith repo
+
+[Changes][v0.1.2]
+
+
 <a name="v0.1.1"></a>
 # [v0.1.1](https://github.com/rhysd/monolith-of-web/releases/tag/v0.1.1) - 03 Jan 2020
 
@@ -14,6 +23,7 @@ First release :tada:
 [Changes][v0.1.0]
 
 
+[v0.1.2]: https://github.com/rhysd/monolith-of-web/compare/v0.1.1...v0.1.2
 [v0.1.1]: https://github.com/rhysd/monolith-of-web/compare/v0.1.0...v0.1.1
 [v0.1.0]: https://github.com/rhysd/monolith-of-web/tree/v0.1.0
 
