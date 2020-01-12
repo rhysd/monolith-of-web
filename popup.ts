@@ -1,3 +1,5 @@
+import { loadFromStorage, storeToStorage, Storage, DEFAULT_STORAGE } from './storage';
+
 type GetButtonState = 'normal' | 'loading' | 'success';
 class GetButton {
     private state: GetButtonState;
@@ -84,7 +86,12 @@ class ConfigButton {
     }
 
     toggle() {
-        if (this.elem.classList.contains(COLOR_DISABLED)) {
+        this.set(!this.enabled());
+    }
+
+    set(enabled: boolean) {
+        console.log('set!', enabled);
+        if (enabled) {
             this.elem.classList.remove(COLOR_DISABLED);
         } else {
             this.elem.classList.add(COLOR_DISABLED);
@@ -154,12 +161,13 @@ async function startMonolith(msg: MessageMonolithContent) {
         noIFrames: !configButtons.noIFrames.enabled(),
         noImages: !configButtons.noImages.enabled(),
     };
+    const cors = configButtons.allowCors.enabled();
 
     const startMsg: MessageToBackground = {
         ...msg,
         type: 'bg:start',
         config,
-        cors: configButtons.allowCors.enabled(),
+        cors,
     };
 
     // Note: Retry is necessary since background page might not be fully opened yet.
@@ -174,6 +182,8 @@ async function startMonolith(msg: MessageMonolithContent) {
     // popup window, chrome.permissions.request() does not work. It just fires its callback
     // without requesting any permissions.
     chrome.runtime.sendMessage(startMsg);
+
+    await storeToStorage(config, cors);
 }
 
 chrome.runtime.onMessage.addListener(async (msg: Message) => {
@@ -197,3 +207,21 @@ chrome.runtime.onMessage.addListener(async (msg: Message) => {
             break;
     }
 });
+
+async function setupConfigButtons() {
+    let storage: Storage;
+    try {
+        storage = await loadFromStorage();
+    } catch (err) {
+        storage = DEFAULT_STORAGE;
+    }
+
+    const { config, cors } = storage;
+    configButtons.noJs.set(!config.noJs);
+    configButtons.noCss.set(!config.noCss);
+    configButtons.noIFrames.set(!config.noIFrames);
+    configButtons.noImages.set(!config.noImages);
+    configButtons.allowCors.set(cors);
+}
+
+setupConfigButtons().catch(err => console.error('Could not set config buttons:', err));

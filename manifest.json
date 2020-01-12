@@ -4,7 +4,8 @@
   "description": "Get a monolith (single static HTML file) of the web page",
   "manifest_version": 2,
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
   "optional_permissions": [
     "http://*/*",
