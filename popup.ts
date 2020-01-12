@@ -1,3 +1,5 @@
+import { loadFromStorage, storeToStorage, Storage, DEFAULT_STORAGE } from './storage';
+
 type GetButtonState = 'normal' | 'loading' | 'success';
 class GetButton {
     private state: GetButtonState;
@@ -84,7 +86,12 @@ class ConfigButton {
     }
 
     toggle() {
-        if (this.elem.classList.contains(COLOR_DISABLED)) {
+        this.set(!this.enabled());
+    }
+
+    set(enabled: boolean) {
+        console.log('set!', enabled);
+        if (enabled) {
             this.elem.classList.remove(COLOR_DISABLED);
         } else {
             this.elem.classList.add(COLOR_DISABLED);
@@ -108,6 +115,7 @@ const configButtons = {
     noCss: new ConfigButton(document.getElementById('config-css') as HTMLElement),
     noIFrames: new ConfigButton(document.getElementById('config-iframes') as HTMLElement),
     noImages: new ConfigButton(document.getElementById('config-images') as HTMLElement),
+    allowCors: new ConfigButton(document.getElementById('config-allow-cors') as HTMLElement),
 };
 
 getButton.onClick(() => {
@@ -116,16 +124,14 @@ getButton.onClick(() => {
 });
 
 type BackgroundWindow = Window & {
-    downloadMonolith(params: MonolithParams): Promise<void>;
+    wasmLoadedInBackground?: boolean;
 };
 
-function checkBackgroundWindow(w: Window | undefined): w is BackgroundWindow {
-    return !!w?.downloadMonolith;
-}
-
-function getBackgroundWindow() {
-    return new Promise<BackgroundWindow | null>(resolve => {
-        chrome.runtime.getBackgroundPage(w => resolve(checkBackgroundWindow(w) ? w : null));
+function pollBackgroundWindowLoaded() {
+    return new Promise<boolean>(resolve => {
+        chrome.runtime.getBackgroundPage(w => {
+            resolve(!!(w as BackgroundWindow).wasmLoadedInBackground);
+        });
     });
 }
 
@@ -133,14 +139,13 @@ function sleep(ms: number) {
     return new Promise<void>(resolve => setTimeout(resolve, ms));
 }
 
-async function getBackgroundWindowWithRetry() {
+async function waitForBackgroundPageLoaded() {
     // Retry for 12 * 250 = 3 seconds
     const retries = 12;
     const interval = 250;
     for (let c = 0; c < retries; ++c) {
-        const w = await getBackgroundWindow();
-        if (w !== null) {
-            return w;
+        if (await pollBackgroundWindowLoaded()) {
+            return;
         }
         await sleep(interval);
     }
@@ -156,19 +161,29 @@ async function startMonolith(msg: MessageMonolithContent) {
         noIFrames: !configButtons.noIFrames.enabled(),
         noImages: !configButtons.noImages.enabled(),
     };
+    const cors = configButtons.allowCors.enabled();
 
-    try {
-        // Note: Retry is necessary since background page might not be open yet.
-        // In the case, popup page must wait for the background page being loaded.
-        // When loading the background page, background.js is loaded and downloadMonolith
-        // method is set to its Window object. Otherwise, the method in the Window object
-        // is not set yet.
-        const bg = await getBackgroundWindowWithRetry();
-        await bg.downloadMonolith({ ...msg, config });
-    } catch (err) {
-        getButton.clear();
-        errorMessage.show(err.name || 'ERROR', err.message);
-    }
+    const startMsg: MessageToBackground = {
+        ...msg,
+        type: 'bg:start',
+        config,
+        cors,
+    };
+
+    // Note: Retry is necessary since background page might not be fully opened yet.
+    // In the case, popup page must wait for the background page being loaded.
+    // When loading the background page, background.js loads Wasm file asynchronously.
+    // We need to wait for the page being fully loaded. Otherwise, the callback to
+    // receive bg:start is not set yet.
+    await waitForBackgroundPageLoaded();
+
+    // Note: Getting the background window object by chrome.runtime.getBackgroundPage()
+    // and call its method does not work. While executing JavaScript in background from
+    // popup window, chrome.permissions.request() does not work. It just fires its callback
+    // without requesting any permissions.
+    chrome.runtime.sendMessage(startMsg);
+
+    await storeToStorage(config, cors);
 }
 
 chrome.runtime.onMessage.addListener(async (msg: Message) => {
@@ -183,8 +198,30 @@ chrome.runtime.onMessage.addListener(async (msg: Message) => {
         case 'popup:complete':
             getButton.success();
             break;
+        case 'popup:error':
+            getButton.clear();
+            errorMessage.show(msg.name || 'ERROR', msg.message);
+            break;
         default:
             console.error('Unexpected message:', msg);
             break;
     }
 });
+
+async function setupConfigButtons() {
+    let storage: Storage;
+    try {
+        storage = await loadFromStorage();
+    } catch (err) {
+        storage = DEFAULT_STORAGE;
+    }
+
+    const { config, cors } = storage;
+    configButtons.noJs.set(!config.noJs);
+    configButtons.noCss.set(!config.noCss);
+    configButtons.noIFrames.set(!config.noIFrames);
+    configButtons.noImages.set(!config.noImages);
+    configButtons.allowCors.set(cors);
+}
+
+setupConfigButtons().catch(err => console.error('Could not set config buttons:', err));

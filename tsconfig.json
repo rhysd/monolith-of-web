@@ -21,6 +21,7 @@
     "bootstrap.ts",
     "background.ts",
     "content.ts",
+    "storage.ts",
     "lib.d.ts"
   ]
 }
