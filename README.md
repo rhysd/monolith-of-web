@@ -30,26 +30,37 @@ in the generated HTML file.
 - `<iframe/>`
 - Images
 
+The button at right-bottom toggles if allow CORS request or not. Please read following 'Permissions'
+section and 'CORS Requests in Background Page' section for more details.
+
 ## Permissions
 
-- `activeTab`: This extension gets an HTML text and a page title from the active tab to generate a monolith
+- **Required permissions**
+  - `activeTab`: This extension gets an HTML text and a page title from the active tab to generate a monolith
+  - `storage`: This extension remembers the last state of toggle buttons at bottom in the popup window.
+- **Optional permissions**
+  - `http://*/*` and `https://*/*`: Allow any cross-origin requests in background page. This is runtime
+    permission so this extension does not require by default. **Only when you see a broken HTML file is
+    generated due to CORS error in background page, please enable this option.** The reason of these
+    permissions are explained in next 'CORS Requests in Background Page' section.
 
-## Caveats
+## CORS Requests in Background Page
 
-This extension fetches all resources in [a background page of Chrome extension][9]. The background page
-conforms CORS policy. Fetching the resources restricted by CORS policy of the server side may be rejected.
-In the case, the resource cannot be embedded in the generated single HTML file hence the resource will
-be fallback into empty.
+This extension generates a single HTML file in background page of Chrome extension. Since CSP in a
+content script is not applied in a background page, some resources in content's HTML cannot be fetched
+in background page.
 
-To solve this, there are two ways but both are not acceptable.
+By default, this extension ignores CORS errors in background page. It is usually not a problem since
+resources protected by CSP are usually scripts which don't affect main content. But a broken single HTML
+page may be generated due to CORS errors.
 
-1. Add broad permissions `http://*` and `https://*` to the extension manifest. This will require strong
-   permissions to users and will be dangerous when the background page has XSS vulnerability. In addition,
-   Chrome Web Store spends longer time to review the extension release.
-2. Send resource fetching requests via a content script. Since content script is executed in the same CORS
-   policy as its site, passing a resource URL to content script and fetching the resource in content script
-   would avoid this CORS restriction. However, it makes implementation of this extension more complicated.
-   In addition,  CORS request in content script will be [disallowed in manifest V3][10].
+When you see a broken page due to the CORS error in background page, please enable 'allow CORS requests'
+button at right-bottom in the popup window. Permission dialog will appear to require permissions for
+sending CORS requests in background page. After accepting it, CORS request error is disabled and all
+resources should be fetched with no error.
+
+After generating a single HTML file with the runtime permissions, this extension will remove the permissions
+as soon as possible for security.
 
 ## Development
 
@@ -90,5 +101,3 @@ Distributed under [the MIT license](LICENSE).
 [6]: https://github.com/rhysd/monolith-of-web
 [7]: https://chrome.google.com/webstore/detail/monolith/koalogomkahjlabefiglodpnhhkokekg
 [8]: https://github.com/rhysd/monolith-of-web/issues
-[9]: https://developer.chrome.com/extensions/background_pages
-[10]: https://www.chromium.org/Home/chromium-security/extension-content-script-fetches
