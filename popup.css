@@ -18,10 +18,9 @@ main {
 .config-btn {
     cursor: pointer;
 }
-/* Colors came from https://bulma.io/documentation/overview/colors/ */
 .tooltip-bg-normal {
     --balloon-color: hsl(204, 86%, 53%);
 }
 .tooltip-bg-danger {
-    --balloon-color: hsl(348, 100%, 61%);
+    --balloon-color: rgb(205, 0, 0);
 }
