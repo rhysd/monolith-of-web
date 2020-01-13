@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@mdi/font": "^4.7.95",
+    "balloon-css": "^1.0.4",
     "bulma": "^0.8.0",
     "monolith": "file:./monolith",
     "sanitize-filename": "^1.6.3"

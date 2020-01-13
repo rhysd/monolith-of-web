@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="bulma.min.css" />
     <link rel="stylesheet" href="materialdesignicons.min.css" />
+    <link rel="stylesheet" href="balloon.min.css" />
     <link rel="stylesheet" href="popup.css" />
     <title>Monolith of Web</title>
   </head>
@@ -24,20 +25,45 @@
       </article>
     </main>
     <div class="config-panel">
-      <span id="config-js" class="config-btn icon is-medium" aria-label="toggle javascript" title="Toggle including JavaScript">
+      <span
+        id="config-js"
+        class="config-btn icon is-medium tooltip-bg-normal"
+        aria-label="Toggle including javascript"
+        data-balloon-pos="up-left"
+      >
         <i class="mdi mdi-language-javascript mdi-24px"></i>
       </span>
-      <span id="config-css" class="config-btn icon is-medium" aria-label="toggle css" title="Toggle including CSS">
+      <span
+        id="config-css"
+        class="config-btn icon is-medium tooltip-bg-normal"
+        aria-label="Toggle including CSS"
+        data-balloon-pos="up"
+      >
         <i class="mdi mdi-language-css3 mdi-24px"></i>
       </span>
-      <span id="config-iframes" class="config-btn icon is-medium" aria-label="toggle iframes" title="Toggle including <iframe/>">
+      <span
+        id="config-iframes"
+        class="config-btn icon is-medium tooltip-bg-normal"
+        aria-label="Toggle including <iframe/>"
+        data-balloon-pos="up"
+      >
         <i class="mdi mdi-iframe-outline mdi-24px"></i>
       </span>
-      <span id="config-images" class="config-btn icon is-medium" aria-label="toggle images" title="Toggle including images">
+      <span
+        id="config-images"
+        class="config-btn icon is-medium tooltip-bg-normal"
+        aria-label="Toggle including images"
+        data-balloon-pos="up"
+      >
         <i class="mdi mdi-file-image mdi-24px"></i>
       </span>
-      <span id="config-allow-cors" class="config-btn icon is-medium" aria-label="allow CORS requests" title="Toggle allowing CORS requests to fetch resources">
-        <i class="mdi mdi-shield-check mdi-24px"></i>
+      <span
+        id="config-allow-cors"
+        class="config-btn icon is-medium tooltip-bg-danger"
+        aria-label="Toggle allowing CORS requests"
+        data-balloon-pos="up-right"
+      >
+        <i class="mdi mdi-shield-check mdi-24px"/></i>
       </span>
     </div>
     <script src="./popup.js"></script>

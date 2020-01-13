@@ -35,6 +35,7 @@ const config: webpack.Configuration = {
                 from: 'node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2',
                 to: 'fonts/',
             },
+            'node_modules/balloon-css/balloon.min.css',
             { from: 'icon', to: 'icon' },
             'manifest.json',
             'popup.html',

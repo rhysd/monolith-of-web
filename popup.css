@@ -1,20 +1,27 @@
 main {
-  display: flex;
-  flex-direction: column;
-  margin: 32px;
+    display: flex;
+    flex-direction: column;
+    margin: 32px;
 }
 #error-message {
-  margin-top: 32px;
-  display: none;
+    margin-top: 32px;
+    display: none;
 }
 #get-monolith-msg {
-  margin-left: 0.3em;
+    margin-left: 0.3em;
 }
 .config-panel {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }
 .config-btn {
-  cursor: pointer;
+    cursor: pointer;
+}
+/* Colors came from https://bulma.io/documentation/overview/colors/ */
+.tooltip-bg-normal {
+    --balloon-color: hsl(204, 86%, 53%);
+}
+.tooltip-bg-danger {
+    --balloon-color: hsl(348, 100%, 61%);
 }
