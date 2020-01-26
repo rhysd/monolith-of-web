@@ -5,7 +5,7 @@
 download a web page as static single HTML file. 'Monolith of Web' provides the same functionality as
 a browser extension by compiling Monolith (written in Rust) into WebAssembly.
 
-[Video on Youtube][2]
+![usage screenshot](./resources/main.gif)
 
 ## Installation
 
@@ -94,7 +94,6 @@ Distributed under [the MIT license](LICENSE).
 
 
 [1]: https://github.com/Y2Z/monolith
-[2]: https://www.youtube.com/watch?v=xBIrFlYE1W0
 [3]: https://chrome.google.com/webstore/detail/koalogomkahjlabefiglodpnhhkokekg
 [4]: https://github.com/rhysd/monolith
 [5]: https://github.com/rhysd/monolith-of-web/releases
